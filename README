@@ -43,13 +43,13 @@ module ActiveRecord
 
       module ClassMethods
         def acts_as_taggable
-          class_eval <<-EOV
+          class_eval do
             include ActiveRecord::Acts::Taggable::InstanceMethods
 
             has_many :tags, :class_name => "Tag",
                             :as         => :taggable,
                             :dependent  => :nullify
-          EOV
+          end
         end
       end
 

@@ -7,13 +7,13 @@ module ActiveRecord
 
       module ClassMethods
         def acts_as_<%= singular_name %>
-          class_eval <<-EOV
+          class_eval do
             include ActiveRecord::Acts::<%= class_name %>::InstanceMethods
 
             has_many :<%= association_name              %>, :class_name => "<%= association_class_name %>",
                       <%= ' ' * association_name.length %>  :as         => :<%= singular_name %>,
                       <%= ' ' * association_name.length %>  :dependent  => :<%= dependency_style %>
-          EOV
+          end
         end
       end
 
