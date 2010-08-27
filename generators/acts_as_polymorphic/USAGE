@@ -1,0 +1,15 @@
+Description:
+    Creates a lib file for acts_as_<polymorphic_interface> so that you do not need to repeat the 'has_many' and any additional methods for each class that is a <polymorphic_interface>.
+
+Example:
+    ./script/generate acts_as_polymorphic <polymorphic_interface> [association_name] [association_class_name] [dependency_style]
+
+    This will create:
+        lib/acts_as_<polymorphic_interface>.rb
+        
+        which will include a line like:
+
+        has_many :<association_name>, :class_name => "<AssociationClassName",
+                                      :as         => :<polymorphic_association>,
+                                      :dependent  => :<dependency_style>
+    

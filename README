@@ -1,0 +1,66 @@
+ActsAsPolymorphic
+=================
+
+TODO: Add documentation.
+
+This is important because the introduction of a polymorphic association means that more than one model is going to have a 'has_many :as'.  Now, while this may not seem too repetitive to add to a few different classes, it easily can be.  This is especially true if you start caring about the :dependent relationship.  Or, if you add new methods based on the association.
+
+
+Example
+=======
+
+TODO: This example isn't great because it illustrates something that is common with a many-to-many
+
+class Tag < ActiveRecord::Base
+  belongs_to :taggable, :polymorphic => true
+end
+
+class Movie < ActiveRecord::Base
+  acts_as_taggable
+end
+
+class Photo < ActiveRecord::Base
+	acts_as_taggable
+end
+
+class Song < ActiveRecord::Base
+  acts_as_taggable
+end
+
+All you need to do is run this:
+script/generate acts_as_polyorphic taggable tags
+or
+script/generate acts_as_polyorphic taggable tags tag destroy
+
+which generates (in the former case)
+
+module ActiveRecord
+  module Acts
+    module Taggable
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+
+      module ClassMethods
+        def acts_as_taggable
+          class_eval <<-EOV
+            include ActiveRecord::Acts::Taggable::InstanceMethods
+
+            has_many :tags, :class_name => "Tag",
+                            :as         => :taggable,
+                            :dependent  => :nullify
+          EOV
+        end
+      end
+
+      module InstanceMethods
+        # Add instance methods here for the taggables
+      end 
+    end
+  end
+end
+
+ActiveRecord::Base.class_eval { include ActiveRecord::Acts::Taggable }
+
+
+Copyright (c) 2010 Chris Morris, released under the MIT license
